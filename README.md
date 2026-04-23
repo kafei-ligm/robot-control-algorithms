@@ -25,4 +25,28 @@
 MATLAB 打开 `pid.m`，直接运行（F5）。
 
 ## MPC 关节位置控制
-> 开发中，使用 casadi 实现线性MPC，含关节角度约束和力矩饱和约束。
+
+
+### 方法
+基于 casadi/ipopt 实现线性MPC，状态空间模型 x=[位置,速度]，预测时域N=20步。
+
+### 参数
+- 预测时域 N=20，状态权重 Q=diag(100,1)，控制权重 R=0.1
+- 约束：力矩 ±100N·m，关节角度 ±180°
+
+### PID vs MPC 对比结果
+
+![对比图](mpc/pid_vs_mpc.png)
+
+| 指标 | PID | MPC |
+|------|-----|-----|
+| 到达时间 | ~1.0s | ~0.5s |
+| 最大力矩 | 100N·m（限幅） | 23N·m |
+| 超调 | ~15% | ~5% |
+| 稳态误差 | 无 | 无 |
+
+### 运行方法
+```bash
+pip install casadi matplotlib numpy
+python mpc/compare.py
+```
