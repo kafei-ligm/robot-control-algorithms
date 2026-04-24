@@ -1,12 +1,8 @@
-
-
-```markdown
 # Robot Control Algorithms
 
 机器人关节控制算法实现，涵盖经典控制（PID/MPC）与路径规划（A*）。
 
 ## 项目结构
-```
 robot-control-algorithms/
 ├── pid.m                    # PID仿真（MATLAB）
 ├── mpc/
@@ -14,9 +10,7 @@ robot-control-algorithms/
 │   ├── mpc_constraint.py    # MPC硬约束演示
 │   └── compare.py           # PID vs MPC对比
 └── trajectory/
-    └── astar.py             # A*路径规划
-```
-
+└── astar.py             # A*路径规划
 ## 1. PID 关节位置控制（MATLAB）
 
 对机械臂单关节进行位置控制，系统建模为二阶质量-阻尼系统（M=1kg，B=2 N·m·s/rad）。
@@ -80,5 +74,4 @@ python mpc/mpc_constraint.py   # 硬约束演示
 **运行：**
 ```bash
 python trajectory/astar.py
-```
 ```
