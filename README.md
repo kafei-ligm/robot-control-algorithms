@@ -1,18 +1,29 @@
+
+
+```markdown
 # Robot Control Algorithms
 
-机器人关节控制算法实现，包含 PID 和 MPC 控制器仿真。
+机器人关节控制算法实现，涵盖经典控制（PID/MPC）与路径规划（A*）。
 
-## PID 关节位置控制
+## 项目结构
+```
+robot-control-algorithms/
+├── pid.m                    # PID仿真（MATLAB）
+├── mpc/
+│   ├── mpc_joint.py         # MPC基础控制
+│   ├── mpc_constraint.py    # MPC硬约束演示
+│   └── compare.py           # PID vs MPC对比
+└── trajectory/
+    └── astar.py             # A*路径规划
+```
 
-### 问题描述
-对机械臂单关节进行位置控制，系统建模为二阶质量-阻尼系统（M=1kg，B=2 N·m·s/rad），目标位置 1.0 rad。
+## 1. PID 关节位置控制（MATLAB）
 
-### 实现内容
-- 位置式PID控制器（含积分限幅、输出限幅）
-- 积分抗饱和（clamping方法）
-- 微分低通滤波
+对机械臂单关节进行位置控制，系统建模为二阶质量-阻尼系统（M=1kg，B=2 N·m·s/rad）。
 
-### 调参实验结果
+**实现内容：** 位置式PID、积分抗饱和（clamping）、微分低通滤波
+
+**调参实验：**
 
 | 参数组 | Kp | Ki | Kd | 现象 |
 |--------|----|----|-----|------|
@@ -21,20 +32,17 @@
 | 较优   | 50 | 10 | 20 | 超调约15%，响应平滑 |
 | 纯PD   | 50 | 0  | 20 | 存在稳态误差，验证积分项必要性 |
 
-### 运行方法
-MATLAB 打开 `pid.m`，直接运行（F5）。
+**运行：** MATLAB打开`pid.m`，F5运行。
 
-## MPC 关节位置控制
+---
 
+## 2. MPC 关节位置控制（Python/casadi）
 
-### 方法
-基于 casadi/ipopt 实现线性MPC，状态空间模型 x=[位置,速度]，预测时域N=20步。
+基于casadi/ipopt实现线性MPC，状态x=[位置,速度]，预测时域N=20步。
 
-### 参数
-- 预测时域 N=20，状态权重 Q=diag(100,1)，控制权重 R=0.1
-- 约束：力矩 ±100N·m，关节角度 ±180°
+**核心优势：** 天然支持硬约束，力矩消耗比PID低78%（23 vs 100 N·m）
 
-### PID vs MPC 对比结果
+### PID vs MPC 对比
 
 ![对比图](mpc/pid_vs_mpc.png)
 
@@ -43,10 +51,34 @@ MATLAB 打开 `pid.m`，直接运行（F5）。
 | 到达时间 | ~1.0s | ~0.5s |
 | 最大力矩 | 100N·m（限幅） | 23N·m |
 | 超调 | ~15% | ~5% |
-| 稳态误差 | 无 | 无 |
+| 硬约束支持 | ✗ | ✓ |
 
-### 运行方法
+### 硬约束演示
+目标位置2.0rad，关节限位1.5rad，MPC自动停在限位边界。
+
+**运行：**
 ```bash
 pip install casadi matplotlib numpy
-python mpc/compare.py
+python mpc/compare.py          # PID vs MPC对比
+python mpc/mpc_constraint.py   # 硬约束演示
+```
+
+---
+
+## 3. A* 路径规划（Python）
+
+20×20栅格地图，8方向移动，欧几里得启发函数。
+
+![A*结果](trajectory/astar_result.png)
+
+| 指标 | 结果 |
+|------|------|
+| 地图大小 | 20×20 |
+| 搜索节点 | 103 / 400 |
+| 路径长度 | 21步 |
+
+**运行：**
+```bash
+python trajectory/astar.py
+```
 ```
