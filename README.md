@@ -3,6 +3,8 @@
 机器人关节控制算法实现，涵盖经典控制（PID/MPC）与路径规划（A*）。
 
 ## 项目结构
+
+```
 robot-control-algorithms/
 ├── pid.m                    # PID仿真（MATLAB）
 ├── mpc/
@@ -10,7 +12,9 @@ robot-control-algorithms/
 │   ├── mpc_constraint.py    # MPC硬约束演示
 │   └── compare.py           # PID vs MPC对比
 └── trajectory/
-└── astar.py             # A*路径规划
+    └── astar.py             # A*路径规划
+```
+
 ## 1. PID 关节位置控制（MATLAB）
 
 对机械臂单关节进行位置控制，系统建模为二阶质量-阻尼系统（M=1kg，B=2 N·m·s/rad）。
@@ -38,7 +42,9 @@ robot-control-algorithms/
 
 ### PID vs MPC 对比
 
-![对比图](mpc/pid_vs_mpc.png)
+<p align="center">
+  <img src="mpc/pid_vs_mpc.png" width="600">
+</p>
 
 | 指标 | PID | MPC |
 |------|-----|-----|
@@ -48,9 +54,11 @@ robot-control-algorithms/
 | 硬约束支持 | ✗ | ✓ |
 
 ### 硬约束演示
+
 目标位置2.0rad，关节限位1.5rad，MPC自动停在限位边界。
 
 **运行：**
+
 ```bash
 pip install casadi matplotlib numpy
 python mpc/compare.py          # PID vs MPC对比
@@ -63,7 +71,9 @@ python mpc/mpc_constraint.py   # 硬约束演示
 
 20×20栅格地图，8方向移动，欧几里得启发函数。
 
-![A*结果](trajectory/astar_result.png)
+<p align="center">
+  <img src="trajectory/astar_result.png" width="500">
+</p>
 
 | 指标 | 结果 |
 |------|------|
@@ -72,9 +82,11 @@ python mpc/mpc_constraint.py   # 硬约束演示
 | 路径长度 | 21步 |
 
 **运行：**
+
 ```bash
 python trajectory/astar.py
 ```
+
 ---
 
 ## 4. 改进 RRT* 路径规划（Python）
@@ -94,7 +106,9 @@ python trajectory/astar.py
 
 ### 对比结果
 
-![RRT对比图](trajectory/rrt_comparison.png)
+<p align="center">
+  <img src="trajectory/rrt_comparison.png" width="600">
+</p>
 
 | 指标 | 标准 RRT* | 改进 RRT* |
 |------|-----------|-----------|
@@ -103,6 +117,7 @@ python trajectory/astar.py
 | 路径平滑 | 折线 | B样条曲线 |
 
 ### 运行方法
+
 ```bash
 python trajectory/improved_rrt_star.py
 ```
